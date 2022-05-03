@@ -18,7 +18,7 @@ else
     FailCommandCheck "java"
 fi
 
-## 1.2. golang
+## 1.2. Golang
 if go version > /dev/null 2>&1; then
     SuccessCommandCheck "Go"
 else
@@ -76,6 +76,23 @@ if [ -e ${MavenInstallerFile} ]; then
     SuccessInstallerFileCheck "Maven" ${MavenInstallerFile}
 else
     FailInstallerFileCheck "Maven" ${MavenInstallerFile}
+fi
+
+## 2.6. check whether Maven repository (.m2) directory exists
+M2Dir="${MavenRepositoryDirectory}/.m2"
+if [ -e $M2Dir ]; then
+    if status=$(ColoringStatus "OK"); then
+        printf "[%s] Maven repository (.m2)\n" $status
+    else
+        exit 99
+    fi
+else
+    if status=$(ColoringStatus "ERROR"); then
+        printf "[%s] Not found .m2 directory in maven repository: %s\n" $status $M2Dir
+        exit 2
+    else
+        exit 99
+    fi
 fi
 
 status=$(ColoringStatus "SUCCESS")
